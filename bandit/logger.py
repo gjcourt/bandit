@@ -7,7 +7,7 @@ class LoggerError(Exception):
 
 
 class Logger(object):
-    key = None
+    test_name = None
 
     def __init__(self):
         self._hit_counter = Counter()
@@ -30,20 +30,20 @@ class LoggerRegistry(object):
     def register(self, cls):
         if not issubclass(cls, Logger):
             raise LoggerError('You must registr a subclass of Logger')
-        if not hasattr(cls, 'key'):
-            raise LoggerError('Logger must contain a logging key')
-        self._registry[cls.key] = cls()
+        if not hasattr(cls, 'test_name'):
+            raise LoggerError('Logger must contain a logging test_name')
+        self._registry[cls.test_name] = cls()
 
     def hit(self, *args, **kwargs):
-        format = kwargs.pop('format', None)
-        return self._registry[format].hit(*args, **kwargs)
+        test_name = kwargs.pop('test_name', None)
+        return self._registry[test_name].hit(*args, **kwargs)
 
-    def attempt(self, format, *args, **kwargs):
-        format = kwargs.pop('format', None)
-        return self._registry[format].attempt(*args, **kwargs)
+    def attempt(self, test_name, *args, **kwargs):
+        test_name = kwargs.pop('test_name', None)
+        return self._registry[test_name].attempt(*args, **kwargs)
 
-    def data(self, format=None):
-        return self._registry[format].data()
+    def data(self, test_name=None):
+        return self._registry[test_name].data()
 
 registry = LoggerRegistry()
 

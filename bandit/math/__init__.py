@@ -1,8 +1,10 @@
 import math
 import operator
 
-from bandit.decorators import zero_division_protect, \
-        normalize
+from bandit.math.decorators import (
+    normalize,
+    zero_division_protect
+)
 
 
 @zero_division_protect

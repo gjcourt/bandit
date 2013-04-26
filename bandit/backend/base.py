@@ -10,6 +10,17 @@ class BanditBackend(object):
     def __init__(self, test_name, choices):
         self.test_name = test_name
         self.choices = choices
+        self.boost_methods = ()
+
+    def boost_weights(self):
+        pass
+
+    def boosted_score(self):
+        weights = self.boost_weights()
+        return dot(weights, choices)
+
+    def select(self, limit=10):
+        return self.choices[:limit]
 
 
 class OptimizingBackend(BanditBackend):
