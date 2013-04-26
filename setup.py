@@ -15,7 +15,7 @@ test_requires = [
 ]
 requires = []
 
-setup(name='bandit'
+setup(name='bandit',
       version=bandit.__version__,
       description="Bandit",
       author="George Courtsunis",
