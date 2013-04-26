@@ -26,6 +26,7 @@ class Logger(object):
 class LoggerRegistry(object):
     def __init__(self):
         self._registry = {}
+        self._context = False
 
     def register(self, cls):
         if not issubclass(cls, Logger):
