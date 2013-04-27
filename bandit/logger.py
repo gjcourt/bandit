@@ -1,26 +1,25 @@
 from collections import Counter
 from functools import partial
 
-
-class LoggerError(Exception):
-    pass
+from bandit.data import Data
+from bandit.exceptions import LoggerError
 
 
 class Logger(object):
     test_name = None
 
     def __init__(self):
-        self._hit_counter = Counter()
-        self._attempt_counter = Counter()
+        self.hits = Counter()
+        self.attempts = Counter()
 
     def hit(self, choice, **kwargs):
-        self._hit_counter[choice.id] += 1
+        self.hits[choice.id] += 1
 
     def attempt(self, choice, **kwargs):
-        self._attempt_counter[choice.id] += 1
+        self.attempts[choice.id] += 1
 
     def data(self, **kwargs):
-        return self._hit_counter, self._attempt_counter
+        return Data(self.hits, self.attempts)
 
 
 class LoggerRegistry(object):
