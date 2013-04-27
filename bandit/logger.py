@@ -40,12 +40,11 @@ class LoggerRegistry(object):
         return self._registry[test_name].hit(*args, **kwargs)
 
     def attempt(self, *args, **kwargs):
-        print 'ARGS', args, kwargs
         test_name = kwargs.pop('test_name', None)
         return self._registry[test_name].attempt(*args, **kwargs)
 
-    def data(self, test_name=None):
-        print 'REGISTRY DATA', test_name
+    def data(self, *args, **kwargs):
+        test_name = kwargs.pop('test_name', None)
         return self._registry[test_name].data()
 
 

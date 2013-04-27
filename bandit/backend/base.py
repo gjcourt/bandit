@@ -109,4 +109,3 @@ class ConsistentBackend(BanditBackend):
         index = int(hashed_seed, 16) % len(combinations)
         return list(combinations[index])
 
-

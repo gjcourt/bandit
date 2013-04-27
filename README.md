@@ -4,8 +4,7 @@ Bandit
 Bandit is a lightweight framework allowing you to create multi-arm bandit tests with ease.
 
 
-Usage:
------
+Usage
 
     >>> from bandit.test import Test
     >>> from bandit.choice import choice

@@ -24,7 +24,17 @@ class TestMeta(type):
                 )
 
             if attr == 'logger':
+                attr_set = False
+
+                if not hasattr(_attr, 'test_name') or _attr.test_name is None:
+                    attr_set = True
+                    setattr(_attr, 'test_name', name)
+
                 logger.register(_attr)
+
+                if attr_set:
+                    delattr(_attr, 'test_name')
+
                 _meta[attr] = logger
             else:
                 _meta[attr] = _attr
