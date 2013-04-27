@@ -1,3 +1,5 @@
+from functools import partial
+
 from bandit import logger
 from bandit.backend import base
 
@@ -21,7 +23,11 @@ class TestMeta(type):
                     {'test_name': name}
                 )
 
-            _meta[attr] = _attr
+            if attr == 'logger':
+                logger.register(_attr)
+                _meta[attr] = logger
+            else:
+                _meta[attr] = _attr
 
         attrs['_meta'] = type('_meta', (object, ), _meta)()
 
@@ -48,22 +54,17 @@ class Test(object):
     def __init__(self, choices):
         self.choices = choices
         self.backend = self._meta.backend(self._meta.test_name, self.choices)
-        self.logger = self._meta.logger()
 
     def __getattr__(self, attr):
-        logger_attrs = set(['data'])
+        logger_attrs = set(['hit', 'attempt', 'data'])
         if attr in logger_attrs:
-            return getattr(self.logger, attr)
+            return partial(getattr(self._meta.logger, attr), test_name=self._meta.test_name)
         else:
             return self.__getattribute__(attr)
 
     def select(self, limit=None, **kwargs):
         selections = self.backend.select(limit, **kwargs)
         for selection in selections:
-            self.logger.hit(selection)
+            self.attempt(selection, **kwargs)
         return selections
-
-
-class TTest(Test):
-    pass
 

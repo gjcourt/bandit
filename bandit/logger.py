@@ -13,13 +13,13 @@ class Logger(object):
         self._hit_counter = Counter()
         self._attempt_counter = Counter()
 
-    def hit(self, choice):
+    def hit(self, choice, **kwargs):
         self._hit_counter[choice.id] += 1
 
-    def attempt(self, choice):
+    def attempt(self, choice, **kwargs):
         self._attempt_counter[choice.id] += 1
 
-    def data(self):
+    def data(self, **kwargs):
         return self._hit_counter, self._attempt_counter
 
 
@@ -39,12 +39,15 @@ class LoggerRegistry(object):
         test_name = kwargs.pop('test_name', None)
         return self._registry[test_name].hit(*args, **kwargs)
 
-    def attempt(self, test_name, *args, **kwargs):
+    def attempt(self, *args, **kwargs):
+        print 'ARGS', args, kwargs
         test_name = kwargs.pop('test_name', None)
         return self._registry[test_name].attempt(*args, **kwargs)
 
     def data(self, test_name=None):
+        print 'REGISTRY DATA', test_name
         return self._registry[test_name].data()
+
 
 registry = LoggerRegistry()
 
@@ -54,9 +57,7 @@ def register(cls):
     return cls
 
 
-register(Logger)
+hit = partial(registry.hit, test_name=None)
+attempt = partial(registry.attempt, test_name=None)
+data = partial(registry.data, test_name=None)
 
-
-hit = partial(registry.hit)
-attempt = partial(registry.attempt)
-data = partial(registry.data)

@@ -1,10 +1,11 @@
-bandit
+Bandit
 ======
 
-Bandit is a lightweight abstraction allowing you to create multi-arm bandit tests with ease!
+Bandit is a lightweight framework allowing you to create multi-arm bandit tests with ease.
 
 
 Usage:
+-----
 
     >>> from bandit.test import Test
     >>> from bandit.choice import choice
@@ -14,4 +15,4 @@ Usage:
     >>> test.select(2)
     [Choice(id=0, obj=0), Choice(id=1, obj=1)]
     >>> test.data()
-    (Counter({0: 1, 1: 1}), Counter())
+    (Counter(), Counter({0: 1, 1: 1}))
