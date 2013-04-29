@@ -1,5 +1,5 @@
 from bandit import test, logger, backend
-from bandit.choice import choice
+from bandit.choice import Choice
 
 
 class MyLogger(logger.Logger):
@@ -42,20 +42,25 @@ class MyOtherTest(test.Test):
 
 
 # Create a few tests
-test = MyTest([choice(i,i) for i in range(3)])
-test2 = MyOtherTest([choice(i,i) for i in range(3)])
+test = MyTest([Choice(i,i) for i in range(3)])
+test2 = MyOtherTest([Choice(i,i) for i in range(3)])
+
 
 # Some test metadata
 meta = {'name': 'foo'}
+
 
 # Select choices (attempts implicitly logged)
 test_choices = test.select(2, meta=meta)
 test2_choices = test2.select(3, meta=meta)
 
+
 # Log hits
 test.hit(test_choices[0], meta=meta)
 test2.hit(test2_choices[0], meta=meta)
 
+
+# Print out the data
 print test.data()
 print test2.data()
 

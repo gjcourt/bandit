@@ -6,8 +6,6 @@ from bandit.exceptions import LoggerError
 
 
 class Logger(object):
-    test_name = None
-
     def __init__(self):
         self.hits = Counter()
         self.attempts = Counter()
@@ -27,12 +25,10 @@ class LoggerRegistry(object):
         self._registry = {}
         self._context = False
 
-    def register(self, cls):
+    def register(self, test_name, cls):
         if not issubclass(cls, Logger):
             raise LoggerError('You must registr a subclass of Logger')
-        if not hasattr(cls, 'test_name'):
-            raise LoggerError('Logger must contain a logging test_name')
-        self._registry[cls.test_name] = cls()
+        self._registry[test_name] = cls()
 
     def hit(self, *args, **kwargs):
         test_name = kwargs.pop('test_name', None)
@@ -47,12 +43,30 @@ class LoggerRegistry(object):
         return self._registry[test_name].data()
 
 
+class Register(object):
+    def __init__(self, registry):
+        self.registry = registry
+        self.test_name = None
+
+    def register_wrapper(self, cls):
+        self.registry.register(self.test_name, cls)
+        self.test_name = None
+        return cls
+
+    def __call__(self, test_name, *args):
+        self.test_name = test_name
+        nargs = len(args)
+        if nargs == 0:
+            return self.register_wrapper
+        elif nargs == 1:
+            cls = args[0]
+            return self.register_wrapper(cls)
+        else:
+            raise Exception('Improper use of decorator')
+
+
 registry = LoggerRegistry()
-
-
-def register(cls):
-    registry.register(cls)
-    return cls
+register = Register(registry)
 
 
 hit = partial(registry.hit, test_name=None)
