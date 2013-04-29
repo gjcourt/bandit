@@ -4,6 +4,12 @@ Bandit
 Bandit is a lightweight framework allowing you to create multi-arm bandit tests with ease.
 
 
+Install
+-------
+
+    pip install bandit
+
+
 Usage
 -----
 
@@ -19,3 +25,9 @@ Usage
     >>>
     >>> test.data()
     Data(hits=Counter(), attempts=Counter({0: 1, 1: 1}))
+
+
+Examples
+-------
+
+Check out an example test in the [repo](https://github.com/gjcourt/bandit/blob/master/bandit/example/simple.py).
